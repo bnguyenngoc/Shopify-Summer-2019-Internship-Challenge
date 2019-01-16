@@ -1,10 +1,12 @@
 class CartItemsController < ApplicationController
-  before_action :set_cart
+  include CurrentCart
+  before_action :set_cart, only: [:create]
 
   def create
-    @cart.add_product(params)
+    @product = Product.find(params[:id])
+    @cart_item = @cart.add_product(@product)
 
-    if @cart.save
+    if @cart_item.save!
       render json: {
         status: 200,
         message: 'added to cart successfully'
@@ -31,4 +33,9 @@ class CartItemsController < ApplicationController
     end
   end
 
+  private
+
+  def cart_item_params
+    params.require(:cart_item).permit(:product_id)
+  end
 end

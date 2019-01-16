@@ -1,4 +1,8 @@
 Rails.application.routes.draw do
+  get 'carts/create'
+
+  get 'carts/destroy'
+
   get 'cart_items/create'
 
   get 'cart_items/destroy'
