@@ -3,7 +3,7 @@ class CreateProducts < ActiveRecord::Migration[5.1]
     create_table :products do |t|
       t.text :title
       t.decimal :price
-      t.integer :inventory_count
+      t.integer :inventory_count, default: 0
 
       t.timestamps
     end

@@ -8,5 +8,8 @@
 
 Product.create! [
     {title: 'Apple', price: '3.50', inventory_count: '25'},
-    {title: 'Orange', price: '4.20', inventory_count: '42'}
+    {title: 'Orange', price: '4.20', inventory_count: '42'},
+    {title: 'Pineapple', price: '6.40'}
 ]
+
+Company.create({name: 'The Company', money: 0})
