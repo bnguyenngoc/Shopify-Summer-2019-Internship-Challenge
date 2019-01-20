@@ -13,9 +13,8 @@ RSpec.describe Product, type: :model do
     }
   end
 
-  let(:product) { create(:product, **attributes)}
-
   context 'validation tests' do
+    let(:product) { create(:product, **attributes)}
     # check that the title field received the right values
     it { expect(product).to allow_value(attributes[:title]).for(:title) }
     # ensure that the title field is never empty
@@ -30,6 +29,18 @@ RSpec.describe Product, type: :model do
     it { expect(product).to allow_value(attributes[:inventory_count]).for(:inventory_count) }
     # ensure that the title field is never empty
     it { expect(product).to validate_presence_of(:inventory_count) }
+  end
+
+  context 'scope validations' do
+    before(:each) do
+      Product.new(attributes).save
+      Product.new(attributes.merge(title: 'another product', inventory_count: 0)).save
+      Product.new(attributes.merge(title: 'third product', inventory_count: 4)).save
+    end
+
+    it 'should return available products' do
+      expect(Product.available.size).to eq(2)
+    end
   end
 
 end
