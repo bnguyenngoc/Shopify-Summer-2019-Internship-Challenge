@@ -6,32 +6,32 @@ class ProductsController < ApplicationController
     render json: result
   end
 
-  def get_one
+  def show
     result = Product.find(params[:id])
     render json: {
-      status: 200,
+      status: :ok,
       product: result
-    }.to_json  
+    } 
   end
 
-  def get
+  def index
     result = Product.all
     render json: {
-      status: 200,
+      status: :ok,
       products: result
-    }.to_json
+    }
   end
 
   def get_available
     result = Product.where("inventory_count > ?", 0)
     if result.present?
       render json: {
-        status: 200,
+        status: :ok,
         products: result
       }.to_json
     else
       render json: {
-        status: 200,
+        status: :ok,
         message: 'All stocks depleted'
       }
     end
@@ -47,18 +47,18 @@ class ProductsController < ApplicationController
 
         company.update_!(money: total)
         render json: {
-          status: 200,
+          status: :ok,
           message: 'Successfully bought'
         }.to_json
       else
         render json: {
-          status: 500,
+          status: :internal_server_error,
           message: 'Error purchasing product'
         }
       end
     else
       render json: {
-        status: 200,
+        status: :ok,
         message: 'Item is no longer available'
       } 
     end

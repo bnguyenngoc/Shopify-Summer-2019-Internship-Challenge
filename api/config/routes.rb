@@ -1,21 +1,24 @@
 Rails.application.routes.draw do
-  get 'carts/create'
-
-  get 'carts/destroy'
-
-  get 'cart_items/create'
-
-  get 'cart_items/destroy'
+  
 
   post '/query' => 'products#query'
   post "/graphql", to: "graphql#execute"
 
 
   #REST API
-  get '/get' => 'products#get'
+
+  # Routes for Product
+  get '/products' => 'products#index'
   get '/get/available' => 'products#get_available'
-  get '/get/:id' => 'products#get_one'
+  get '/products/:id' => 'products#show'
   put '/purchase/:id' => 'products#purchase_one'
+
+  # Routes for Cart
+  resources :carts, only: [:show, :create, :update, :destroy]
+
+  # Routes for Cart item
+  resources :cart_items, :except => [:create, :update]
+  post '/cart_items/:id' => 'cart_items#create'
   
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 end

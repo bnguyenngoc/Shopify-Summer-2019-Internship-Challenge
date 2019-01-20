@@ -15,7 +15,7 @@ RSpec.describe Product, type: :model do
 
   let(:product) { create(:product, **attributes)}
 
-  describe 'model validations' do
+  context 'validation tests' do
     # check that the title field received the right values
     it { expect(product).to allow_value(attributes[:title]).for(:title) }
     # ensure that the title field is never empty
