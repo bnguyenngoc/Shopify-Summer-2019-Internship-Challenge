@@ -1,4 +1,7 @@
 class ProductsController < ApplicationController
+
+  # querys all products through GraphQL
+  # POST   /query
   def query
     result = Schema.execute(
       params[:query]
@@ -6,6 +9,8 @@ class ProductsController < ApplicationController
     render json: result
   end
 
+  # returns one specific product
+  # GET    /products/:id
   def show
     result = Product.find(params[:id])
     render json: {
@@ -14,30 +19,27 @@ class ProductsController < ApplicationController
     } 
   end
 
+  # if the parameter "available" is set to true (ex. the JSON object sent is {"avaiable": true} ),
+  # the result will only return the products that have an inventory count superior to 0
+  # GET    /products
   def index
-    result = Product.all
+    result = params[:available] ? Product.where("inventory_count > ?", 0) : Product.all
+    if result.present?
     render json: {
       status: :ok,
       products: result
     }
-  end
-
-  def get_available
-    result = Product.where("inventory_count > ?", 0)
-    if result.present?
-      render json: {
-        status: :ok,
-        products: result
-      }.to_json
-    else
+    else 
       render json: {
         status: :ok,
         message: 'All stocks depleted'
       }
-    end
-    
+    end 
   end
 
+  # purchase_one is used outside of the context of a shopping cart. It decrements the
+  # product by 1
+  # PUT    /purchase/:id
   def purchase_one
     product = Product.find(params[:id])
     company = Company.first

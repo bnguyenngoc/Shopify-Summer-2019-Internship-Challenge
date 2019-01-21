@@ -2,6 +2,8 @@ class CartsController < ApplicationController
   include CurrentCart
   before_action :set_cart, only: [:show, :update, :destroy]
 
+  # show current cart
+  # GET    /carts/:id
   def show
     @cart_items = CartItem.where(cart_id: @cart.id)
     render json: {
@@ -12,6 +14,8 @@ class CartsController < ApplicationController
     }
   end
 
+  # create a new cart
+  # POST   /carts
   def create
     @cart = Cart.new(cart_params)
     if @cart.save!
@@ -28,6 +32,8 @@ class CartsController < ApplicationController
     end
   end
 
+  # updates cart
+  # PATCH  /carts/:id
   def update
     if @cart.update(cart_params)
       render json: {
@@ -43,23 +49,22 @@ class CartsController < ApplicationController
   end
 
 
-
+  # destroys current cart
+  # DELETE /carts/:id
   def destroy
-    #if @cart.id == session[:cart_id]
+    if @cart.id == session[:cart_id]
       @cart.destroy
       session[:cart_id] = nil
       render json: {
         status: :ok,
         message: 'Cart was successfully destroyed'
       }
-=begin
     else
       render json: {
         status: :ok,
         message: 'Can only destroy current cart'
       }
-=end
-    #end
+    end
   end
 
   private
