@@ -20,7 +20,7 @@ Example:
 docker-compose run web rails routes
 ```
 
-##Tests
+## Tests
 
 The app uses rspec for testing. `docker-compose run web rails test` to run all tests
 
